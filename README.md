@@ -1,6 +1,6 @@
 # java-spring-boot-neo4j-emailer
 
-## How to set up srping security tags for freemarker
+## How to set up Spring Security tags for Freemarker?
 1. Create these [2 classes](/src/main/java/com/example/emailer/security/config/) somewhere in your project.
 
 2. Insert `<#assign security=JspTaglibs["http://www.springframework.org/security/tags"]/>` into the top of your Freemarker template.
