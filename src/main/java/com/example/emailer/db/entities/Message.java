@@ -24,7 +24,7 @@ public class Message {
     @GeneratedValue
     private Long id;
 
-    @Relationship(type = "SENT_BY")
+    @Relationship(type = "SENT_BY", direction = Relationship.UNDIRECTED)
     private Account sender;
 
     private String status;
