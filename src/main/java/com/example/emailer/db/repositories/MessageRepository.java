@@ -9,8 +9,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface MessageRepository extends Neo4jRepository<Message, Long> {
-    @Query("MATCH (a: Account)-[]->(m: Message) RETURN m;")
-    List<Message> findAllAvailableToAccount(@Param("account") Account account);
+    @Query("MATCH (a:Account {email: {account_email} })-->(m: Message) RETURN m;")
+    List<Message> findAllAvailableToAccount(@Param("account_email") String accountEmail);
 
     List<Message> findAllBySender(Account account);
 
