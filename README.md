@@ -1,6 +1,25 @@
 # java-spring-boot-neo4j-emailer
 
 ## How to set up Spring Security tags for Freemarker?
+0. Add maven dependencies
+```xml
+<dependency>
+    <groupId>javax.servlet</groupId>
+    <artifactId>jstl</artifactId>
+    <scope>provided</scope>
+</dependency>
+<dependency>
+    <groupId>org.apache.tomcat.embed</groupId>
+    <artifactId>tomcat-embed-jasper</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.security</groupId>
+    <artifactId>spring-security-taglibs</artifactId>
+    <version>5.1.5.RELEASE</version>
+    <scope>${defaultScope}</scope>
+</dependency>
+```
+
 1. Create these [2 classes](/src/main/java/com/example/emailer/security/config/) somewhere in your project.
 
 2. Insert `<#assign security=JspTaglibs["http://www.springframework.org/security/tags"]/>` into the top of your Freemarker template.
