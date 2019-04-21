@@ -1,17 +1,30 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-<div>
-    <#list accounts as a>
-        <p>${a.getEmail()}</p>
-    </#list>
-</div>
-</body>
-</html>
+<#-- @ftlvariable name="accounts" type="java.util.List<com.example.emailer.db.entities.Account>" -->
+<#include "_application.ftl">
+
+<#macro page_title>Users in system</#macro>
+
+<#macro page_body>
+    <table>
+        <thead>
+        <tr>
+            <td>id</td>
+            <td>email</td>
+            <td>first name</td>
+            <td>last name</td>
+        </tr>
+        </thead>
+
+        <tbody>
+        <#list accounts as a>
+            <tr>
+                <td>${a.getId()}</td>
+                <td>${a.getEmail()}</td>
+                <td>${a.getFirstName()}</td>
+                <td>${a.getLastName()}</td>
+            </tr>
+        </#list>
+        </tbody>
+    </table>
+</#macro>
+
+<@page></@page>

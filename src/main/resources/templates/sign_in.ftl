@@ -1,31 +1,30 @@
-<!doctype html>
-<html>
-<head>
-    <link rel="stylesheet" href="/css/style.css">
-    <title>SigIn</title>
-</head>
-<body>
-<div class="form-style-3">
+<#include "_application.ftl">
+
+<#macro page_title>Sign in</#macro>
+
+<#macro page_body>
     <form method="post">
         <fieldset>
             <legend>Sign In</legend>
-            <#if error??>
+            <#if RequestParameters.error??>
                 <h1>Неправильный логин или пароль</h1>
             </#if>
-            <label for="email"><span>Email <span class="required">*</span></span><input type="email"
-                                                                                        class="input-field"
-                                                                                        name="email"
-                                                                                        value=""/></label>
-            <label for="password"><span>Password<span class="required">*</span></span><input type="password"
-                                                                                           class="input-field"
-                                                                                           name="password"
-                                                                                           value=""/></label>
+
+            <label>
+                Email *
+                <input type="email" class="form-control" name="email"/>
+            </label>
+
+            <label>
+                Password *
+                <input type="password" class="form-control" name="password">
+            </label>
         </fieldset>
+
         <fieldset>
-            <label><span> </span><input type="submit" value="Submit"/></label>
+            <input type="submit" class="btn btn-primary">
         </fieldset>
     </form>
-</div>
+</#macro>
 
-</body>
-</html>
+<@page></@page>
