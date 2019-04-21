@@ -1,4 +1,4 @@
-<#include "_application.ftl">
+<#include "_html.ftl">
 
 <#macro page_title>Sign in</#macro>
 

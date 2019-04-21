@@ -1,5 +1,5 @@
 <#-- @ftlvariable name="accounts" type="java.util.List<com.example.emailer.db.entities.Account>" -->
-<#include "_application.ftl">
+<#include "_html.ftl">
 
 <#macro page_title>Users in system</#macro>
 
