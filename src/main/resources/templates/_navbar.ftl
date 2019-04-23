@@ -11,7 +11,15 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
+                <a class="nav-link" href="#">Drafts</a>
+            </li>
+
+            <li class="nav-item">
+                <a href="/inbox/sent" class="nav-link">Sent</a>
+            </li>
+
+            <li class="nav-item">
+                <a href="/inbox/drafts" class="nav-link">Drafts</a>
             </li>
 
             <li class="nav-item dropdown">
@@ -28,11 +36,18 @@
                 </div>
             </li>
 
+            <li class="nav-item">
+                <a href="/inbox/send" class="nav-link">Compose</a>
+            </li>
         </ul>
 
         <ul class="navbar-nav">
             <@security.authorize access="isAuthenticated()">
-                logged in as <@security.authentication property="principal.username" />
+                <li class="nav-item">
+                    <a class="nav-link disabled">
+                        signed in as <@security.authentication property="principal.username" />
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/sign_out">Sign out</a>
                 </li>

@@ -15,6 +15,8 @@
                 <input type="email" class="form-control" name="email"/>
             </label>
 
+            <br>
+
             <label>
                 Password *
                 <input type="password" class="form-control" name="password">
@@ -24,6 +26,11 @@
         <fieldset>
             <input type="submit" class="btn btn-primary">
         </fieldset>
+
+        <p>
+            Don't have an account?
+            <a href="/sign_up">Create</a>
+        </p>
     </form>
 </#macro>
 
