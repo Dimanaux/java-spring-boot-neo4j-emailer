@@ -13,6 +13,7 @@ import org.neo4j.ogm.annotation.typeconversion.DateString;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.StringJoiner;
 
 @Data
 @NoArgsConstructor
@@ -35,6 +36,12 @@ public class Message {
 
     @DateString
     private LocalDateTime sentAt;
+
+    public String getRecipientsSummary() {
+        StringJoiner stringJoiner = new StringJoiner(", ");
+        getRecipients().stream().map(Account::getEmail).forEach(stringJoiner::add);
+        return stringJoiner.toString();
+    }
 
     @Relationship(type = "SENT_TO")
     private List<Account> recipients = new LinkedList<>();
