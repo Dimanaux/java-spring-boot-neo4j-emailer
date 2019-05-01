@@ -8,7 +8,6 @@ import com.example.emailer.forms.MessageForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +34,6 @@ public class MessageServiceImpl implements MessageService {
             setSubject(messageForm.getSubject());
             setContent(messageForm.getContent());
         }};
-        message.setRecipients(Collections.emptyList());
         messageForm.getRecipients().stream()
                 .map(accountRepository::findByEmail)
                 .filter(Optional::isPresent)
