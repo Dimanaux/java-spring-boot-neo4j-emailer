@@ -8,6 +8,7 @@ import com.example.emailer.forms.MessageForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,32 +30,34 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public MessageSender send(MessageForm messageForm) {
+    public MessageSender send(final MessageForm messageForm) {
         final Message emailMessage = toMessage(messageForm);
 
         return account -> {
             emailMessage.setSender(account);
             emailMessage.setStatus("SENT");
+            emailMessage.setSentAt(new Date());
             messageRepository.save(emailMessage);
         };
     }
 
     @Override
-    public MessageSender saveToDrafts(MessageForm messageForm) {
+    public MessageSender saveToDrafts(final MessageForm messageForm) {
         final Message emailMessage = toMessage(messageForm);
 
         return account -> {
             emailMessage.setSender(account);
             emailMessage.setStatus("DRAFT");
+            emailMessage.setSentAt(new Date());
             messageRepository.save(emailMessage);
         };
     }
 
     private Message toMessage(MessageForm messageForm) {
-        Message email = new Message() {{
-            setSubject(messageForm.getSubject());
-            setContent(messageForm.getContent());
-        }};
+        Message email = new Message();
+        email.setSubject(messageForm.getSubject());
+        email.setContent(messageForm.getContent());
+
         messageForm.getRecipients().stream()
                 .map(accountRepository::findByEmail)
                 .filter(Optional::isPresent)
