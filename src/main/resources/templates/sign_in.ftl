@@ -24,6 +24,11 @@
         </fieldset>
 
         <fieldset>
+            <label>
+                Remember me
+                <input type="checkbox" name="remember-me">
+            </label>
+
             <input type="submit" class="btn btn-primary">
         </fieldset>
 
