@@ -17,12 +17,12 @@
         <tbody>
         <#list messages as m>
             <tr>
-                <td>${m.getSubject()}</td>
-                <td>${m.getSender().getEmail()}</td>
+                <td>${m.subject}</td>
+                <td>${m.sender.email}</td>
                 <td>${m.getRecipientsSummary()}</td>
-                <td>${m.getStatus()}</td>
-                <td>${m.getSentAt()}</td>
-                <td>${m.getContent()}</td>
+                <td>${m.status}</td>
+                <td>${m.sentAt?string('dd.MM.yyyy HH:mm:ss')}</td>
+                <td>${m.content}</td>
             </tr>
         </#list>
         </tbody>
