@@ -10,7 +10,7 @@ import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 import org.neo4j.ogm.annotation.typeconversion.DateString;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringJoiner;
@@ -25,7 +25,7 @@ public class Message {
     @GeneratedValue
     private Long messageId;
 
-    @Relationship(type = "SENT_BY", direction = Relationship.DIRECTION)
+    @Relationship(type = "SENT_BY", direction = Relationship.UNDIRECTED)
     private Account sender;
 
     private String status;
@@ -34,8 +34,8 @@ public class Message {
 
     private String content;
 
-    @DateString
-    private LocalDateTime sentAt;
+    @DateString("yyyy-MM-dd'T'HH:mm:ss")
+    private Date sentAt;
 
     public String getRecipientsSummary() {
         StringJoiner stringJoiner = new StringJoiner(", ");
