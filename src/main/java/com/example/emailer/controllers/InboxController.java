@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping(path = "/inbox")
@@ -45,8 +46,9 @@ public class InboxController {
     @PostMapping(path = "/send")
     public String sendMessage(MessageForm messageForm,
                               @AuthenticationPrincipal AccountDetails accountDetails) {
-        messageService.send(messageForm)
-                .by(accountDetails.getAccount());
+        Account sender = accountDetails.getAccount();
+
+        messageService.send(messageForm).by(sender);
 
         return "redirect:/inbox";
     }
@@ -54,8 +56,9 @@ public class InboxController {
     @PostMapping(path = "/draft")
     public String saveDraft(MessageForm messageForm,
                             @AuthenticationPrincipal AccountDetails accountDetails) {
-        messageService.saveToDrafts(messageForm)
-                .by(accountDetails.getAccount());
+        Account sender = accountDetails.getAccount();
+
+        messageService.saveToDrafts(messageForm).by(sender);
 
         return "redirect:/inbox";
     }

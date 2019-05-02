@@ -55,7 +55,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .defaultSuccessUrl("/inbox")
                 .and()
-                .logout()
+                .logout().deleteCookies("JSESSIONID")
                 .logoutUrl("/sign_out")
                 .logoutSuccessUrl("/sign_in")
                 .permitAll()
