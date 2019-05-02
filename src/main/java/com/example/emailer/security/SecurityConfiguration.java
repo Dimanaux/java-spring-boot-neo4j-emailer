@@ -58,7 +58,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutUrl("/sign_out")
                 .logoutSuccessUrl("/sign_in")
-                .permitAll();
+                .permitAll()
+                .and()
+                .rememberMe()
+                .key("uniqueAndSecret")
+                .userDetailsService(userDetailsService);
     }
 
     @Bean
