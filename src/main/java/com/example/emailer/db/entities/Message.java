@@ -23,9 +23,9 @@ import java.util.StringJoiner;
 public class Message {
     @Id
     @GeneratedValue
-    private Long id;
+    private Long messageId;
 
-    @Relationship(type = "SENT_BY", direction = Relationship.UNDIRECTED)
+    @Relationship(type = "SENT_BY", direction = Relationship.DIRECTION)
     private Account sender;
 
     private String status;

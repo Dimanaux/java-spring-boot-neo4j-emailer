@@ -20,7 +20,7 @@ import java.util.List;
 public class Group {
     @Id
     @GeneratedValue
-    private Long id;
+    private Long groupId;
 
     private String name;
 

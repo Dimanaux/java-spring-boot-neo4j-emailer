@@ -18,7 +18,7 @@ import java.util.List;
 public class Account {
     @Id
     @GeneratedValue
-    private Long id;
+    private Long accountId;
 
     private String firstName;
     private String lastName;

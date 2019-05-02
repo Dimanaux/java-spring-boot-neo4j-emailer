@@ -21,7 +21,7 @@ import java.util.List;
 public class Folder {
     @Id
     @GeneratedValue
-    private Long id;
+    private Long folderId;
 
     @Relationship(type = "OWNED_BY")
     private Account account;
