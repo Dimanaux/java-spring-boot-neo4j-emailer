@@ -29,8 +29,29 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Message toMessage(MessageForm messageForm) {
-        Message message = new Message() {{
+    public MessageSender send(MessageForm messageForm) {
+        final Message emailMessage = toMessage(messageForm);
+
+        return account -> {
+            emailMessage.setSender(account);
+            emailMessage.setStatus("SENT");
+            messageRepository.save(emailMessage);
+        };
+    }
+
+    @Override
+    public MessageSender saveToDrafts(MessageForm messageForm) {
+        final Message emailMessage = toMessage(messageForm);
+
+        return account -> {
+            emailMessage.setSender(account);
+            emailMessage.setStatus("DRAFT");
+            messageRepository.save(emailMessage);
+        };
+    }
+
+    private Message toMessage(MessageForm messageForm) {
+        Message email = new Message() {{
             setSubject(messageForm.getSubject());
             setContent(messageForm.getContent());
         }};
@@ -38,19 +59,7 @@ public class MessageServiceImpl implements MessageService {
                 .map(accountRepository::findByEmail)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .forEach(a -> message.getRecipients().add(a));
-        return message;
-    }
-
-    @Override
-    public void send(Message message) {
-        message.setStatus("SENT");
-        messageRepository.save(message);
-    }
-
-    @Override
-    public void saveToDrafts(Message draft) {
-        draft.setStatus("DRAFT");
-        messageRepository.save(draft);
+                .forEach(a -> email.getRecipients().add(a));
+        return email;
     }
 }

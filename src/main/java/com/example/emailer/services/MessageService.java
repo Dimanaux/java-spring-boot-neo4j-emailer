@@ -9,9 +9,7 @@ import java.util.List;
 public interface MessageService {
     List<Message> findAllAvailableTo(Account account);
 
-    Message toMessage(MessageForm messageForm);
+    MessageSender send(MessageForm messageForm);
 
-    void send(Message message);
-
-    void saveToDrafts(Message draft);
+    MessageSender saveToDrafts(MessageForm messageForm);
 }

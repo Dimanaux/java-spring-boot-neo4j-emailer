@@ -2,6 +2,7 @@ package com.example.emailer.controllers;
 
 import com.example.emailer.db.entities.Account;
 import com.example.emailer.db.entities.Message;
+import com.example.emailer.db.repositories.AccountRepository;
 import com.example.emailer.forms.MessageForm;
 import com.example.emailer.security.AccountDetails;
 import com.example.emailer.services.MessageService;
@@ -19,10 +20,12 @@ import java.util.List;
 @RequestMapping(path = "/inbox")
 public class InboxController {
     private final MessageService messageService;
+    private final AccountRepository accountRepository;
 
     @Autowired
-    public InboxController(MessageService messageService) {
+    public InboxController(MessageService messageService, AccountRepository accountRepository) {
         this.messageService = messageService;
+        this.accountRepository = accountRepository;
     }
 
     @GetMapping
@@ -42,10 +45,8 @@ public class InboxController {
     @PostMapping(path = "/send")
     public String sendMessage(MessageForm messageForm,
                               @AuthenticationPrincipal AccountDetails accountDetails) {
-        Message message = messageService.toMessage(messageForm);
-        message.setSender(accountDetails.getAccount());
-
-        messageService.send(message);
+        messageService.send(messageForm)
+                .by(accountDetails.getAccount());
 
         return "redirect:/inbox";
     }
@@ -53,10 +54,8 @@ public class InboxController {
     @PostMapping(path = "/draft")
     public String saveDraft(MessageForm messageForm,
                             @AuthenticationPrincipal AccountDetails accountDetails) {
-        Message draft = messageService.toMessage(messageForm);
-        draft.setSender(accountDetails.getAccount());
-
-        messageService.saveToDrafts(draft);
+        messageService.saveToDrafts(messageForm)
+                .by(accountDetails.getAccount());
 
         return "redirect:/inbox";
     }
