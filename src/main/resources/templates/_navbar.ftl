@@ -1,3 +1,4 @@
+<#-- @ftlvariable name="current_user" type="com.example.emailer.db.entities.Account" -->
 <#assign security=JspTaglibs["http://www.springframework.org/security/tags"]/>
 
 <#macro navbar>
@@ -29,10 +30,13 @@
                 </a>
 
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
+                    <#if current_user?? && current_user.folders??>
+                        <#list current_user.folders as folder>
+                            <a class="dropdown-item" href="/inbox/folders/${folder.name}">${folder.name}</a>
+                        </#list>
+                        <div class="dropdown-divider"></div>
+                    </#if>
+                    <a class="dropdown-item" href="/inbox/folders/new">New folder</a>
                 </div>
             </li>
 
