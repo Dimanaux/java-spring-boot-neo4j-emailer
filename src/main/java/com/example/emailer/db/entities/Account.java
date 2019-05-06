@@ -1,5 +1,6 @@
 package com.example.emailer.db.entities;
 
+import com.example.emailer.db.entities.id.AccountIdStrategy;
 import lombok.*;
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
@@ -17,7 +18,7 @@ import java.util.List;
 @NodeEntity(label = "Account")
 public class Account {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = AccountIdStrategy.class)
     private Long accountId;
 
     private String firstName;
@@ -35,4 +36,8 @@ public class Account {
 
     @Relationship(type = "IN_CONTACT", direction = Relationship.UNDIRECTED)
     private List<Account> contacts = new LinkedList<>();
+
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
 }
