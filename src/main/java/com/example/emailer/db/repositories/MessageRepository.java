@@ -14,9 +14,11 @@ public interface MessageRepository extends Neo4jRepository<Message, Long> {
 
     List<Message> findAllBySender(Account account);
 
-    @Query("MATCH (a: Account)-[r]->(m: Message {status: 'DRAFT'}) RETURN m, r, a;")
-    List<Message> findAllDrafts(Account account);
+    List<Message> findAllBySenderAndStatus(Account account, String status);
 
     @Query("MATCH (a: Account)-[r:RECEIVED]->(m: Message) RETURN m, r, a;")
     List<Message> findAllReceivedByAccount(Account account);
+
+    @Query("MATCH (a: Account {accountId: {accountId}})-[p]->(m: Message {messageId: {messageId}}) DELETE p;")
+    void deleteRelationBetween(Long accountId, Long messageId);
 }
