@@ -17,7 +17,7 @@
                     <div class="card-body">
                         <ul class="list-group">
                             <#list group.contacts as contact>
-                                <a class="list-group-item" href="/inbox/send?recipient_email=${contact.email}">
+                                <a class="list-group-item" href="/inbox/compose?recipient_email=${contact.email}">
                                     ${contact.getFullName()}
                                 </a>
                             </#list>
