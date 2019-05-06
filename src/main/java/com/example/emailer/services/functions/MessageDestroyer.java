@@ -1,4 +1,4 @@
-package com.example.emailer.services;
+package com.example.emailer.services.functions;
 
 import com.example.emailer.db.entities.Account;
 
