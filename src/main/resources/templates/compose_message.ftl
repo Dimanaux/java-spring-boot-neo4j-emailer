@@ -1,3 +1,4 @@
+<#-- @ftlvariable name="recipient_email" type="java.lang.String" -->
 <#-- @ftlvariable name="signature" type="java.lang.String" -->
 <#include "_html.ftl">
 
@@ -11,7 +12,7 @@
 </#macro>
 
 <#macro page_body>
-    <form method="post" id="app">
+    <form method="post" id="app" action="/inbox/messages">
         <div class="form-group">
             <label>Email address</label>
             <div class="form-row">
@@ -22,7 +23,13 @@
                             v-bind:key="email.id"
                     ></recipient-email-item>
                 </ul>
-                <input type="text" class="form-control " v-model="newEmail" v-on:blur="newEmailField()">
+                <input type="text" class="form-control"
+                        <#if RequestParameters.recipient_email??>
+                            value="${RequestParameters.recipient_email}"
+                        </#if>
+                       v-model="newEmail"
+                       v-on:blur="newEmailField()"
+                >
             </div>
         </div>
         <div class="form-group">
@@ -42,7 +49,8 @@
             </label>
         </div>
 
-        <input type="submit" class="btn btn-primary" value="Send">
+        <input type="submit" class="btn btn-primary" onclick="changeAction('/inbox/messages')" value="Send">
+        <input type="submit" class="btn btn-success" onclick="changeAction('/inbox/messages/drafts')" value="Save to drafts">
     </form>
 
     <script src="/static/compose_message.js"></script>
