@@ -1,6 +1,7 @@
 package com.example.emailer.db.entities;
 
 
+import com.example.emailer.db.entities.id.FolderIdStrategy;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,7 @@ import java.util.List;
 @NodeEntity(label = "Folder")
 public class Folder {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = FolderIdStrategy.class)
     private Long folderId;
 
     @Relationship(type = "OWNED_BY")

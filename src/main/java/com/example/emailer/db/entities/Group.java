@@ -1,5 +1,6 @@
 package com.example.emailer.db.entities;
 
+import com.example.emailer.db.entities.id.GroupIdStrategy;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,7 @@ import java.util.List;
 @NodeEntity(label = "Group")
 public class Group {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GroupIdStrategy.class)
     private Long groupId;
 
     private String name;
