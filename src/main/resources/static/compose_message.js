@@ -1,6 +1,6 @@
 Vue.component('recipient-email-item', {
     props: ['field'],
-    template: '<input class="form-control" :name="field.name" :value="field.email" disabled>'
+    template: '<input class="form-control" :name="field.name" :value="field.email">'
 });
 
 const app = new Vue({
@@ -23,3 +23,5 @@ const app = new Vue({
         }
     }
 });
+
+const changeAction = path = document.getElementById('app').action = path;
