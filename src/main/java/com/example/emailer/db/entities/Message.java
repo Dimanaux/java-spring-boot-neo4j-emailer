@@ -1,9 +1,6 @@
 package com.example.emailer.db.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import com.example.emailer.db.entities.id.MessageIdStrategy;
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
@@ -15,18 +12,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringJoiner;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString(exclude = {"sender", "recipients", "copiesRecipients", "secretCopiesRecipients", "attachments"})
 @NodeEntity(label = "Message")
 public class Message {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = MessageIdStrategy.class)
     private Long messageId;
 
     @Relationship(type = "SENT_BY", direction = Relationship.UNDIRECTED)
     private Account sender;
+
+    private String senderEmail;
 
     private String status;
 
@@ -36,12 +31,6 @@ public class Message {
 
     @DateString("yyyy-MM-dd'T'HH:mm:ss")
     private Date sentAt;
-
-    public String getRecipientsSummary() {
-        StringJoiner stringJoiner = new StringJoiner(", ");
-        getRecipients().stream().map(Account::getEmail).forEach(stringJoiner::add);
-        return stringJoiner.toString();
-    }
 
     @Relationship(type = "SENT_TO")
     private List<Account> recipients = new LinkedList<>();
@@ -54,4 +43,79 @@ public class Message {
 
     @Relationship(type = "CONTAINS")
     private List<String> attachments = new LinkedList<>();
+
+    public Message() {
+        sentAt = new Date();
+    }
+
+    public String getRecipientsSummary() {
+        StringJoiner stringJoiner = new StringJoiner(", ");
+        recipients.stream().map(Account::getEmail).forEach(stringJoiner::add);
+        return stringJoiner.toString();
+    }
+
+    public void setSender(Account account) {
+        sender = account;
+        senderEmail = account.getEmail();
+    }
+
+    public Account getSender() {
+        return sender;
+    }
+
+    public String getSenderEmail() {
+        return senderEmail;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public Date getSentAt() {
+        return sentAt;
+    }
+
+    public List<Account> getRecipients() {
+        return recipients;
+    }
+
+    public List<Account> getCopiesRecipients() {
+        return copiesRecipients;
+    }
+
+    public List<Account> getSecretCopiesRecipients() {
+        return secretCopiesRecipients;
+    }
+
+    public Message setStatus(String status) {
+        this.status = status;
+        return this;
+    }
+
+    public Message setSubject(String subject) {
+        this.subject = subject;
+        return this;
+    }
+
+    public Message setContent(String content) {
+        this.content = content;
+        return this;
+    }
+
+    public Message setSentAt(Date sentAt) {
+        this.sentAt = sentAt;
+        return this;
+    }
+
+    public Long getMessageId() {
+        return messageId;
+    }
 }
