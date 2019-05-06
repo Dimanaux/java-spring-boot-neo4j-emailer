@@ -41,7 +41,7 @@
             </li>
 
             <li class="nav-item">
-                <a href="/inbox/send" class="nav-link">Compose</a>
+                <a href="/inbox/compose" class="nav-link">Compose</a>
             </li>
         </ul>
 
