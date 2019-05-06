@@ -2,12 +2,17 @@
 <#-- @ftlvariable name="message" type="com.example.emailer.db.entities.Message" -->
 <#include "_html.ftl">
 
+<#macro imports>
+    <script src="/static/delete.js"></script>
+</#macro>
+
 <#macro page_body>
     <div class="card" <#--style="width: 18rem;"-->>
         <div class="card-body">
             <h5 class="card-title">${message.subject}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">from ${message.sender.email}</h6>
+            <h6 class="card-subtitle mb-2 text-muted">from ${message.senderEmail}</h6>
             <p class="card-text">${message.content}</p>
+            <small>at ${message.sentAt?string('dd.MM.yyyy HH:mm')}</small>
         </div>
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
@@ -21,7 +26,7 @@
                     No copies
                 </#list>
             </li>
-            <#if current_user?? && current_user.email == message.sender.email>
+            <#if current_user?? && current_user.email == message.senderEmail>
                 <li class="list-group-item">
                     Secretly copied to:
                     <#list message.secretCopiesRecipients as recipient>
@@ -33,8 +38,12 @@
             </#if>
         </ul>
         <div class="card-body">
-            <a href="#" class="card-link">Card link</a>
-            <a href="#" class="card-link">Another link</a>
+            <button
+                    rel="nofollow"
+                    class="btn btn-danger"
+                    onclick="deleteRequest('/inbox/messages/${message.messageId}')">
+                Delete
+            </button>
         </div>
     </div>
 </#macro>
