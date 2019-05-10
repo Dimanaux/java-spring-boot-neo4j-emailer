@@ -18,10 +18,8 @@ public class Message {
     @GeneratedValue(strategy = MessageIdStrategy.class)
     private Long messageId;
 
-    @Relationship(type = "SENT_BY", direction = Relationship.UNDIRECTED)
+    @Relationship(type = "SENT_BY")
     private Account sender;
-
-    private String senderEmail;
 
     private String status;
 
@@ -35,13 +33,13 @@ public class Message {
     @Relationship(type = "SENT_TO")
     private List<Account> recipients = new LinkedList<>();
 
-    @Relationship(type = "COPY_TO")
+    @Relationship(type = "COPIED_TO")
     private List<Account> copiesRecipients = new LinkedList<>();
 
-    @Relationship(type = "SECRET_COPY_TO")
+    @Relationship(type = "SECRETLY_COPIED_TO")
     private List<Account> secretCopiesRecipients = new LinkedList<>();
 
-    @Relationship(type = "CONTAINS")
+    @Relationship(type = "HAS")
     private List<String> attachments = new LinkedList<>();
 
     public Message() {
@@ -56,15 +54,10 @@ public class Message {
 
     public void setSender(Account account) {
         sender = account;
-        senderEmail = account.getEmail();
     }
 
     public Account getSender() {
         return sender;
-    }
-
-    public String getSenderEmail() {
-        return senderEmail;
     }
 
     public String getStatus() {
@@ -95,24 +88,20 @@ public class Message {
         return secretCopiesRecipients;
     }
 
-    public Message setStatus(String status) {
+    public void setStatus(String status) {
         this.status = status;
-        return this;
     }
 
-    public Message setSubject(String subject) {
+    public void setSubject(String subject) {
         this.subject = subject;
-        return this;
     }
 
-    public Message setContent(String content) {
+    public void setContent(String content) {
         this.content = content;
-        return this;
     }
 
-    public Message setSentAt(Date sentAt) {
+    public void setSentAt(Date sentAt) {
         this.sentAt = sentAt;
-        return this;
     }
 
     public Long getMessageId() {

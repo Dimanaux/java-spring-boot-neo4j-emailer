@@ -21,7 +21,7 @@
                         <#if current_user?? && current_user.email == m.sender.email>
                             to ${m.getRecipientsSummary()}
                         <#else>
-                            from ${m.getSenderEmail()}
+                            from ${m.sender.email}
                         </#if>
                     </small>
                 </a>

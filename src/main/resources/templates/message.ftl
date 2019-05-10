@@ -10,7 +10,7 @@
     <div class="card" <#--style="width: 18rem;"-->>
         <div class="card-body">
             <h5 class="card-title">${message.subject}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">from ${message.senderEmail}</h6>
+            <h6 class="card-subtitle mb-2 text-muted">from ${message.sender.email}</h6>
             <p class="card-text">${message.content}</p>
             <small>at ${message.sentAt?string('dd.MM.yyyy HH:mm')}</small>
         </div>
@@ -26,7 +26,7 @@
                     No copies
                 </#list>
             </li>
-            <#if current_user?? && current_user.email == message.senderEmail>
+            <#if current_user?? && current_user.email == message.sender.email>
                 <li class="list-group-item">
                     Secretly copied to:
                     <#list message.secretCopiesRecipients as recipient>
