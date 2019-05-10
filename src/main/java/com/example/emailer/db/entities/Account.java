@@ -7,16 +7,17 @@ import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = {"contacts", "folders", "groups", "password"})
+@ToString(exclude = {"folders", "groups", "password"/*, "contacts"*/})
 @NodeEntity(label = "Account")
-public class Account {
+public class Account implements Comparable<Account> {
     @Id
     @GeneratedValue(strategy = AccountIdStrategy.class)
     private Long accountId;
@@ -29,15 +30,37 @@ public class Account {
     private String password;
 
     @Relationship(type = "IN")
-    private List<Group> groups = new LinkedList<>();
+    private Set<Group> groups = new TreeSet<>();
 
     @Relationship(type = "OWNS")
-    private List<Folder> folders = new LinkedList<>();
+    private Set<Folder> folders = new TreeSet<>();
 
-    @Relationship(type = "IN_CONTACT", direction = Relationship.UNDIRECTED)
-    private List<Account> contacts = new LinkedList<>();
+    @Relationship(type = "HAS")
+    private Set<Message> messages = new TreeSet<>();
+
+//    @Relationship(type = "IN_CONTACT", direction = Relationship.UNDIRECTED)
+//    private Set<Account> contacts = new TreeSet<>();
 
     public String getFullName() {
         return firstName + " " + lastName;
+    }
+
+    @Override
+    public int compareTo(Account o) {
+        return Long.compare(accountId, o.accountId);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Account account = (Account) o;
+        return Objects.equals(accountId, account.accountId) &&
+                email.equals(account.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(accountId, email);
     }
 }

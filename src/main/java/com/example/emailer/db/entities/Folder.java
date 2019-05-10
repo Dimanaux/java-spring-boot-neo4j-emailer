@@ -19,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @ToString(exclude = {"account", "messages"})
 @NodeEntity(label = "Folder")
-public class Folder {
+public class Folder implements Comparable<Folder> {
     @Id
     @GeneratedValue(strategy = FolderIdStrategy.class)
     private Long folderId;
@@ -31,4 +31,9 @@ public class Folder {
 
     @Relationship(type = "CONTAINS")
     private List<Message> messages = new LinkedList<>();
+
+    @Override
+    public int compareTo(Folder o) {
+        return Long.compare(folderId, o.folderId);
+    }
 }

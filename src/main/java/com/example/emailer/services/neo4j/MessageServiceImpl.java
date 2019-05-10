@@ -12,7 +12,6 @@ import com.example.emailer.services.functions.MessageReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -35,17 +34,17 @@ public class MessageServiceImpl implements MessageService {
 
         return account -> {
             email.setStatus("SENT");
-            email.setSentAt(new Date());
             messageRepository.save(email);
 
-            email.setSender(account);
-            messageRepository.save(email);
+            messageRepository.setSender(account.getAccountId(), email.getMessageId());
 
             messageRepository.addMessageToAccount(account.getAccountId(), email.getMessageId());
 
-            for (Account a : email.getRecipients()) {
-                messageRepository.addMessageToAccount(a.getAccountId(), email.getMessageId());
-            }
+            accountStream(messageForm.getRecipients())
+                    .forEach(a -> messageRepository.addMessageToAccount(a.getAccountId(), email.getMessageId()));
+            accountStream(messageForm.getRecipients())
+                    .forEach(a -> messageRepository.setRecipient(a.getAccountId(), email.getMessageId()));
+            //todo copies recipients
         };
     }
 
@@ -58,7 +57,6 @@ public class MessageServiceImpl implements MessageService {
 
             emailMessage.setSender(account);
             emailMessage.setStatus("DRAFT");
-            emailMessage.setSentAt(new Date());
 
             accountRepository.save(account);
             messageRepository.save(emailMessage);
@@ -100,14 +98,14 @@ public class MessageServiceImpl implements MessageService {
         email.setSubject(messageForm.getSubject());
         email.setContent(messageForm.getContent());
 
-        accountStream(messageForm.getRecipients())
-                .forEach(a -> email.getRecipients().add(a));
-
-        accountStream(messageForm.getCopyRecipients())
-                .forEach(a -> email.getCopiesRecipients().add(a));
-
-        accountStream(messageForm.getSecretCopyRecipients())
-                .forEach(a -> email.getSecretCopiesRecipients().add(a));
+//        accountStream(messageForm.getRecipients())
+//                .forEach(a -> email.getRecipients().add(a));
+//
+//        accountStream(messageForm.getCopyRecipients())
+//                .forEach(a -> email.getCopiesRecipients().add(a));
+//
+//        accountStream(messageForm.getSecretCopyRecipients())
+//                .forEach(a -> email.getSecretCopiesRecipients().add(a));
 
         return email;
     }

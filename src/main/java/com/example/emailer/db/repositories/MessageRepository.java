@@ -9,16 +9,28 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface MessageRepository extends Neo4jRepository<Message, Long> {
-    @Query("MATCH (sender:Account {email: {account_email} })-[by]-(m: Message)-[to:SENT_TO]->(r:Account) RETURN sender, m, by, to, r;")
-    List<Message> findAllAvailableToAccount(@Param("account_email") String accountEmail);
-
     List<Message> findAllBySender(Account account);
 
     List<Message> findAllBySenderAndStatus(Account account, String status);
 
-    @Query("MATCH (a: Account)-[r:RECEIVED]->(m: Message) RETURN m, r, a;")
-    List<Message> findAllReceivedByAccount(Account account);
+    @Query("MATCH (a: Account {accountId: {accountId}})-[p:HAS]->(m: Message {messageId: {messageId}}) DELETE p;")
+    void deleteMessageFromAccount(@Param("accountId") long accountId,
+                                  @Param("messageId") long messageId);
 
-    @Query("MATCH (a: Account {accountId: {accountId}})-[p]->(m: Message {messageId: {messageId}}) DELETE p;")
-    void deleteRelationBetween(Long accountId, Long messageId);
+    @Query("MATCH (a:Account {accountId: {accountId}}) MATCH (m:Message {messageId: {messageId}}) CREATE (a)-[r:HAS]->(m);")
+    void addMessageToAccount(@Param("accountId") long accountId,
+                             @Param("messageId") long messageId);
+
+    @Query("MATCH (a:Account {accountId: {accountId}})-[p:HAS]->(m:Message)-[r]-(s) RETURN a, p, m, r, s;")
+    List<Message> findAllByAccount(@Param("accountId") long accountId);
+
+    @Query("MATCH  (a:Account {accountId: {accountId}}) MATCH (m:Message {messageId: {messageId}}) RETURN exists((a)-[:HAS]->(m));")
+    boolean accountHasMessage(@Param("accountId") long accountId,
+                              @Param("messageId") long messageId);
+
+    @Query("MATCH (a:Account {accountId: {accountId}}) MATCH (m:Message {messageId: {messageId}}) CREATE (a)<-[:SENT_BY]-(m);")
+    void setSender(@Param("accountId") Long accountId, @Param("messageId") Long messageId);
+
+    @Query("MATCH (a:Account {accountId: {accountId}}) MATCH (m:Message {messageId: {messageId}}) CREATE (a)<-[:SENT_TO]-(m);")
+    void setRecipient(@Param("accountId") Long accountId, @Param("messageId") Long messageId);
 }

@@ -1,19 +1,19 @@
 package com.example.emailer.db.entities;
 
 import com.example.emailer.db.entities.id.MessageIdStrategy;
-import org.neo4j.ogm.annotation.GeneratedValue;
-import org.neo4j.ogm.annotation.Id;
-import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Relationship;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.ToString;
+import org.neo4j.ogm.annotation.*;
 import org.neo4j.ogm.annotation.typeconversion.DateString;
 
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.StringJoiner;
+import java.util.*;
 
+@Data
+@AllArgsConstructor
+@ToString(exclude = {"sender", "recipients", "copiesRecipients", "secretCopiesRecipients", "attachments"})
 @NodeEntity(label = "Message")
-public class Message {
+public class Message implements Comparable<Message> {
     @Id
     @GeneratedValue(strategy = MessageIdStrategy.class)
     private Long messageId;
@@ -31,16 +31,16 @@ public class Message {
     private Date sentAt;
 
     @Relationship(type = "SENT_TO")
-    private List<Account> recipients = new LinkedList<>();
+    private Set<Account> recipients = new TreeSet<>();
 
     @Relationship(type = "COPIED_TO")
-    private List<Account> copiesRecipients = new LinkedList<>();
+    private Set<Account> copiesRecipients = new TreeSet<>();
 
     @Relationship(type = "SECRETLY_COPIED_TO")
-    private List<Account> secretCopiesRecipients = new LinkedList<>();
+    private Set<Account> secretCopiesRecipients = new TreeSet<>();
 
     @Relationship(type = "HAS")
-    private List<String> attachments = new LinkedList<>();
+    private Set<String> attachments = new TreeSet<>();
 
     public Message() {
         sentAt = new Date();
@@ -52,59 +52,25 @@ public class Message {
         return stringJoiner.toString();
     }
 
-    public void setSender(Account account) {
-        sender = account;
+    @Override
+    public int compareTo(Message o) {
+        return Long.compare(messageId, o.messageId);
     }
 
-    public Account getSender() {
-        return sender;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Message message = (Message) o;
+        return Objects.equals(messageId, message.messageId) &&
+                Objects.equals(status, message.status) &&
+                Objects.equals(subject, message.subject) &&
+                Objects.equals(content, message.content) &&
+                Objects.equals(sentAt, message.sentAt);
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public Date getSentAt() {
-        return sentAt;
-    }
-
-    public List<Account> getRecipients() {
-        return recipients;
-    }
-
-    public List<Account> getCopiesRecipients() {
-        return copiesRecipients;
-    }
-
-    public List<Account> getSecretCopiesRecipients() {
-        return secretCopiesRecipients;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public void setSentAt(Date sentAt) {
-        this.sentAt = sentAt;
-    }
-
-    public Long getMessageId() {
-        return messageId;
+    @Override
+    public int hashCode() {
+        return Objects.hash(messageId, status, subject, content);
     }
 }

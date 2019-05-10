@@ -10,15 +10,15 @@ import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(exclude = {"owner", "contacts"})
 @NodeEntity(label = "Group")
-public class Group {
+public class Group implements Comparable<Group> {
     @Id
     @GeneratedValue(strategy = GroupIdStrategy.class)
     private Long groupId;
@@ -29,5 +29,10 @@ public class Group {
     private Account owner;
 
     @Relationship(type = "CONTAINS")
-    private List<Account> contacts = new LinkedList<>();
+    private Set<Account> contacts = new TreeSet<>();
+
+    @Override
+    public int compareTo(Group o) {
+        return Long.compare(groupId, o.groupId);
+    }
 }
