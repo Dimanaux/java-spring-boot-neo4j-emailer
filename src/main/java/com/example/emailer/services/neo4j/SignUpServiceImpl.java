@@ -1,8 +1,9 @@
-package com.example.emailer.services;
+package com.example.emailer.services.neo4j;
 
 import com.example.emailer.db.entities.Account;
 import com.example.emailer.db.repositories.AccountRepository;
 import com.example.emailer.forms.SignUpForm;
+import com.example.emailer.services.SignUpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

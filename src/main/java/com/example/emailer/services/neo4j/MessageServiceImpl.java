@@ -1,13 +1,14 @@
-package com.example.emailer.services;
+package com.example.emailer.services.neo4j;
 
 import com.example.emailer.db.entities.Account;
 import com.example.emailer.db.entities.Message;
 import com.example.emailer.db.repositories.AccountRepository;
 import com.example.emailer.db.repositories.MessageRepository;
 import com.example.emailer.forms.MessageForm;
+import com.example.emailer.services.MessageService;
+import com.example.emailer.services.functions.Creator;
 import com.example.emailer.services.functions.MessageDestroyer;
 import com.example.emailer.services.functions.MessageReader;
-import com.example.emailer.services.functions.MessageSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,30 +30,37 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<Message> findAllAvailableTo(Account account) {
-        return messageRepository.findAllAvailableToAccount(account.getEmail());
-    }
-
-    @Override
-    public MessageSender send(final MessageForm messageForm) {
-        final Message emailMessage = toMessage(messageForm);
+    public Creator send(final MessageForm messageForm) {
+        final Message email = toMessage(messageForm);
 
         return account -> {
-            emailMessage.setSender(account);
-            emailMessage.setStatus("SENT");
-            emailMessage.setSentAt(new Date());
-            messageRepository.save(emailMessage);
+            email.setStatus("SENT");
+            email.setSentAt(new Date());
+            messageRepository.save(email);
+
+            email.setSender(account);
+            messageRepository.save(email);
+
+            messageRepository.addMessageToAccount(account.getAccountId(), email.getMessageId());
+
+            for (Account a : email.getRecipients()) {
+                messageRepository.addMessageToAccount(a.getAccountId(), email.getMessageId());
+            }
         };
     }
 
     @Override
-    public MessageSender saveToDrafts(final MessageForm messageForm) {
+    public Creator saveToDrafts(final MessageForm messageForm) {
         final Message emailMessage = toMessage(messageForm);
 
         return account -> {
+            account.getMessages().add(emailMessage);
+
             emailMessage.setSender(account);
             emailMessage.setStatus("DRAFT");
             emailMessage.setSentAt(new Date());
+
+            accountRepository.save(account);
             messageRepository.save(emailMessage);
         };
     }
@@ -68,17 +76,18 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
+    public List<Message> findBelongingToAccount(Account account) {
+        return messageRepository.findAllByAccount(account.getAccountId());
+    }
+
+    @Override
     public MessageReader can(Account account) {
-        return message ->
-                account.equals(message.getSender())
-                        || message.getRecipients().contains(account)
-                        || message.getCopiesRecipients().contains(account)
-                        || message.getSecretCopiesRecipients().contains(account);
+        return message -> messageRepository.accountHasMessage(account.getAccountId(), message.getMessageId());
     }
 
     @Override
     public MessageDestroyer delete(Long messageId) {
-        return account -> messageRepository.deleteRelationBetween(account.getAccountId(), messageId);
+        return account -> messageRepository.deleteMessageFromAccount(account.getAccountId(), messageId);
     }
 
     @Override
