@@ -5,5 +5,5 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping(path = "/inbox/folders")
-public class FolderController {
+public class FoldersController {
 }
