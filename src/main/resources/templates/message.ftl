@@ -4,6 +4,7 @@
 
 <#macro imports>
     <script src="/static/delete.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </#macro>
 
 <#macro page_body>
@@ -11,7 +12,7 @@
         <div class="card-body">
             <h5 class="card-title">${message.subject}</h5>
             <h6 class="card-subtitle mb-2 text-muted">from ${message.sender.email}</h6>
-            <p class="card-text">${message.content}</p>
+            <p class="card-text" id="content">${message.content}</p>
             <small>at ${message.sentAt?string('dd.MM.yyyy HH:mm')}</small>
         </div>
         <ul class="list-group list-group-flush">
@@ -46,6 +47,11 @@
             </button>
         </div>
     </div>
+
+    <script>
+        document.getElementById('content').innerHTML =
+            marked(`${message.content}`);
+    </script>
 </#macro>
 
 <@page></@page>
