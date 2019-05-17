@@ -1,14 +1,30 @@
 package com.example.emailer.forms.validation;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import com.example.emailer.forms.SignUpForm;
+import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
+import org.springframework.validation.Validator;
+
 import java.util.Arrays;
 
-public class EmailAddressValidator implements ConstraintValidator<EmailAddressConstraint, String> {
-    public void initialize(EmailAddressConstraint constraint) {
+@Component
+public class EmailAddressConstraint implements Validator {
+    @Override
+    public boolean supports(Class<?> aClass) {
+        return SignUpForm.class.isAssignableFrom(aClass);
     }
 
-    public boolean isValid(String email, ConstraintValidatorContext context) {
+    @Override
+    public void validate(Object o, Errors errors) {
+        ValidationUtils.rejectIfEmpty(errors, "email", "email.empty");
+        SignUpForm signUpForm = (SignUpForm) o;
+        if (isValidEmail(signUpForm.getEmail())) {
+            errors.rejectValue("email", "invalid.email");
+        }
+    }
+
+    private boolean isValidEmail(String email) {
         String[] split = email.split("@");
         if (split.length != 2) {
             return false;
@@ -32,7 +48,7 @@ public class EmailAddressValidator implements ConstraintValidator<EmailAddressCo
     }
 
     private boolean isValidHost(String host) {
-        if (host.length() > 253) {
+        if (host.length() > 253 || host.isEmpty()) {
             return false;
         }
 
@@ -46,5 +62,4 @@ public class EmailAddressValidator implements ConstraintValidator<EmailAddressCo
     private boolean rfc1123Symbol(char c) {
         return Character.isLowerCase(c) || Character.isDigit(c) || c == '-';
     }
-
 }

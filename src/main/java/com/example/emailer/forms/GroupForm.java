@@ -1,9 +1,6 @@
 package com.example.emailer.forms;
 
-import com.example.emailer.forms.validation.LatinOnly;
-
 public class GroupForm {
-    @LatinOnly
     private String name;
 
     public GroupForm() {

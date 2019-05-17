@@ -1,9 +1,6 @@
 package com.example.emailer.forms;
 
-import com.example.emailer.forms.validation.EmailAddress;
-
 public class SignUpForm {
-    @EmailAddress
     private String email;
 
     private String firstName;

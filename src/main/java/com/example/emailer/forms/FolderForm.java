@@ -1,9 +1,6 @@
 package com.example.emailer.forms;
 
-import com.example.emailer.forms.validation.LatinOnly;
-
 public class FolderForm {
-    @LatinOnly
     private String name;
 
     public FolderForm() {
