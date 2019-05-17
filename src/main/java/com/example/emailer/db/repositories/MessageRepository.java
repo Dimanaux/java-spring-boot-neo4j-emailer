@@ -9,7 +9,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface MessageRepository extends Neo4jRepository<Message, Long> {
-    List<Message> findAllBySender(Account account);
+    @Query("MATCH (a:Account {accountId: {accountId}})-[p:HAS]->(m:Message {status: 'SENT'})-[r]-(i) RETURN a, m, p, r, i;")
+    List<Message> findAllBySender(@Param("accountId") long accountId);
 
     List<Message> findAllBySenderAndStatus(Account account, String status);
 
@@ -33,4 +34,7 @@ public interface MessageRepository extends Neo4jRepository<Message, Long> {
 
     @Query("MATCH (a:Account {accountId: {accountId}}) MATCH (m:Message {messageId: {messageId}}) CREATE (a)<-[:SENT_TO]-(m);")
     void setRecipient(@Param("accountId") Long accountId, @Param("messageId") Long messageId);
+
+    @Query("MATCH (f:Folder {folderId: {folderId}})-[c:CONTAINS]->(m:Message)-[r]-(a) RETURN f, c, m, r, a;")
+    List<Message> findByFolder(@Param("folderId") long folderId);
 }

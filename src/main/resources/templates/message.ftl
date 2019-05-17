@@ -3,7 +3,7 @@
 <#include "_html.ftl">
 
 <#macro imports>
-    <script src="/static/delete.js"></script>
+    <script src="/static/message.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </#macro>
 
@@ -45,12 +45,23 @@
                     onclick="deleteRequest('/inbox/messages/${message.messageId}')">
                 Delete
             </button>
+            <div class="btn-group" role="group">
+                <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Add to folder
+                </button>
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                    <#list folders as folder>
+                        <a class="dropdown-item"
+                           onclick="moveMessageToFolder(${message.messageId}, '${folder.name}')">${folder.name}</a>
+                    </#list>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        document.getElementById('content').innerHTML =
-            marked(`${message.content}`);
+        document.getElementById('content').innerHTML = marked(`${message.content}`);
     </script>
 </#macro>
 

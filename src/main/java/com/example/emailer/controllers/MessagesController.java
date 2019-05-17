@@ -31,9 +31,10 @@ public class MessagesController {
         Optional<Message> message = messageService.find(messageId);
         Account account = accountDetails.getAccount();
 
-        if (message.isPresent() && messageService.can(account).read(message.get())) {
+        if (message.isPresent() && messageService.can(account).test(message.get())) {
             modelMap.put("message", message.get());
             modelMap.put("current_user", account);
+            modelMap.put("folders", account.getFolders());
             return "message";
         } else {
             throw new AccessDeniedException("Access denied. You don't have permissions to read this message");
@@ -43,7 +44,7 @@ public class MessagesController {
     @DeleteMapping(path = "/{id}")
     public void deleteMessage(@PathVariable("id") Long messageId,
                               @AuthenticationPrincipal AccountDetails accountDetails) {
-        messageService.delete(messageId).from(accountDetails.getAccount());
+        messageService.delete(messageId).accept(accountDetails.getAccount());
     }
 
     @PostMapping
@@ -51,7 +52,7 @@ public class MessagesController {
                               @AuthenticationPrincipal AccountDetails accountDetails) {
         Account sender = accountDetails.getAccount();
 
-        messageService.send(messageForm).by(sender);
+        messageService.send(messageForm).accept(sender);
 
         return "redirect:/inbox";
     }
@@ -61,7 +62,7 @@ public class MessagesController {
                                @AuthenticationPrincipal AccountDetails accountDetails) {
         Account sender = accountDetails.getAccount();
 
-        messageService.saveToDrafts(messageForm).by(sender);
+        messageService.saveToDrafts(messageForm).accept(sender);
 
         return "redirect:/inbox";
 

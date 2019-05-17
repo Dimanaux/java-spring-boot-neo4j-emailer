@@ -6,14 +6,13 @@ import com.example.emailer.db.repositories.AccountRepository;
 import com.example.emailer.db.repositories.MessageRepository;
 import com.example.emailer.forms.MessageForm;
 import com.example.emailer.services.MessageService;
-import com.example.emailer.services.functions.Creator;
-import com.example.emailer.services.functions.MessageDestroyer;
-import com.example.emailer.services.functions.MessageReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 @Service
@@ -29,7 +28,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Creator send(final MessageForm messageForm) {
+    public Consumer<Account> send(final MessageForm messageForm) {
         final Message email = toMessage(messageForm);
 
         return account -> {
@@ -49,7 +48,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Creator saveToDrafts(final MessageForm messageForm) {
+    public Consumer<Account> saveToDrafts(final MessageForm messageForm) {
         final Message emailMessage = toMessage(messageForm);
 
         return account -> {
@@ -79,18 +78,20 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public MessageReader can(Account account) {
+    public Predicate<Message> can(Account account) {
         return message -> messageRepository.accountHasMessage(account.getAccountId(), message.getMessageId());
     }
 
     @Override
-    public MessageDestroyer delete(Long messageId) {
+    public Consumer<Account> delete(Long messageId) {
         return account -> messageRepository.deleteMessageFromAccount(account.getAccountId(), messageId);
     }
 
     @Override
     public List<Message> findSentBy(Account account) {
-        return messageRepository.findAllBySender(account);
+        List<Message> allBySender = messageRepository.findAllBySender(account.getAccountId());
+        allBySender.forEach(m -> m.setSender(account));
+        return allBySender;
     }
 
     private Message toMessage(MessageForm messageForm) {
