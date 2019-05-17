@@ -5,3 +5,12 @@ const deleteRequest = (path) => {
             .then(_ => alert('Deleted.'));
     }
 };
+
+const moveMessageToFolder = (messageId, folderName) => {
+    fetch(`/inbox/folders/${folderName}`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        credentials: 'include',
+        body: `messageId=${messageId}`
+    });
+};
