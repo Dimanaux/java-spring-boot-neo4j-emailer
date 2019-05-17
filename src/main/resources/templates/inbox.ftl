@@ -1,12 +1,8 @@
 <#-- @ftlvariable name="current_user" type="com.example.emailer.db.entities.Account" -->
 <#-- @ftlvariable name="messages" type="java.util.List<com.example.emailer.db.entities.Message>" -->
 <#include "_html.ftl">
-<#include "_contacts.ftl">
 
 <#macro page_body>
-    <div class="container">
-        <@contacts></@contacts>
-    </div>
     <br>
     <div class="container">
         <div class="list-group">
