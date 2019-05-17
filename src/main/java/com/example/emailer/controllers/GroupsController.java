@@ -36,7 +36,7 @@ public class GroupsController {
     @PostMapping
     public String createGroup(GroupForm group, @AuthenticationPrincipal AccountDetails accountDetails) {
         Account account = accountDetails.getAccount();
-        groupService.create(group).by(account);
+        groupService.create(group).accept(account);
         return "redirect:/groups";
     }
 
