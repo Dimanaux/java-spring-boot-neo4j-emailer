@@ -27,22 +27,24 @@ public class GroupsController {
     }
 
     @GetMapping
-    public String getGroups(ModelMap modelMap, @AuthenticationPrincipal AccountDetails accountDetails) {
+    public String getGroups(@AuthenticationPrincipal AccountDetails accountDetails,
+                            ModelMap modelMap) {
         Account account = accountDetails.getAccount();
-        modelMap.put("groups", account.getGroups());
+        modelMap.put("groups", groupService.by(account));
         return "groups";
     }
 
     @PostMapping
-    public String createGroup(GroupForm group, @AuthenticationPrincipal AccountDetails accountDetails) {
+    public String createGroup(@AuthenticationPrincipal AccountDetails accountDetails,
+                              GroupForm group) {
         Account account = accountDetails.getAccount();
         groupService.create(group).accept(account);
         return "redirect:/groups";
     }
 
     @PostMapping(path = "/{id}")
-    public String joinGroup(@PathVariable("id") Long groupId,
-                            @AuthenticationPrincipal AccountDetails accountDetails) {
+    public String joinGroup(@AuthenticationPrincipal AccountDetails accountDetails,
+                            @PathVariable("id") Long groupId) {
         Account account = accountDetails.getAccount();
         Optional<Group> group = groupService.findById(groupId);
 
