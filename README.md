@@ -37,7 +37,7 @@
 ### Jump to:
 1. [Aspects](/src/main/java/com/example/emailer/aspects/)
 2. [validation](/src/main/java/com/example/emailer/forms/validation/) TODO
-3. [ajax](/src/main/resources/static/message.js)
+3. [ajax](/src/main/resources/static/message.js) + [controller](/src/main/java/com/example/emailer/controllers/MessagesController.java), [2](/src/main/java/com/example/emailer/controllers/FoldersController.java)
 4. TODO chat plugin
 5. [spring data jpa NEO4J!](/src/main/java/com/example/emailer/db/repositories/)
 6. Docker TODO
