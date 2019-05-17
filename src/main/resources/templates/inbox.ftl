@@ -7,6 +7,7 @@
     <div class="container">
         <@contacts></@contacts>
     </div>
+    <br>
     <div class="container">
         <div class="list-group">
             <#list messages as m>
@@ -18,7 +19,7 @@
                     <p class="mb-1">${m.content}</p>
                     <small>
                         ${m.status}
-                        <#if current_user?? && current_user.email == m.sender.email>
+                        <#if current_user?? && current_user.equals(m.sender)>
                             to ${m.getRecipientsSummary()}
                         <#else>
                             from ${m.sender.email}

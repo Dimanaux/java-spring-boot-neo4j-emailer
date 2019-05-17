@@ -3,6 +3,7 @@ package com.example.emailer.controllers;
 import com.example.emailer.db.entities.Account;
 import com.example.emailer.db.entities.Message;
 import com.example.emailer.security.AccountDetails;
+import com.example.emailer.services.GroupService;
 import com.example.emailer.services.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,47 +17,50 @@ import java.util.List;
 @Controller
 @RequestMapping(path = "/inbox")
 public class InboxController {
-    private final MessageService messageService;
+    private final MessageService messages;
+    private final GroupService groupService;
 
     @Autowired
-    public InboxController(MessageService messageService) {
-        this.messageService = messageService;
+    public InboxController(MessageService messageService,
+                           GroupService groupService) {
+        this.messages = messageService;
+        this.groupService = groupService;
     }
 
     @GetMapping
     public String getInbox(@AuthenticationPrincipal AccountDetails accountDetails,
                            ModelMap modelMap) {
         Account account = accountDetails.getAccount();
-        List<Message> messages = messageService.findAllAvailableTo(account);
-        modelMap.put("messages", messages);
-        modelMap.put("groups", account.getGroups());
+        List<Message> all = messages.findBelongingToAccount(account);
+        modelMap.put("messages", all);
         return "inbox";
     }
 
     @GetMapping(path = "/compose")
-    public String getMessageForm() {
+    public String getMessageForm(@AuthenticationPrincipal AccountDetails accountDetails,
+                                 ModelMap modelMap) {
+        Account account = accountDetails.getAccount();
+        modelMap.put("contacts", groupService.contactsOf(account));
         return "compose_message";
     }
 
 
     @GetMapping(path = "/drafts")
-    public String getDrafts(ModelMap modelMap,
-                            @AuthenticationPrincipal AccountDetails accountDetails) {
+    public String getDrafts(@AuthenticationPrincipal AccountDetails accountDetails,
+                            ModelMap modelMap) {
         Account account = accountDetails.getAccount();
-        List<Message> drafts = messageService.findDraftsOf(account);
+        List<Message> drafts = messages.findDraftsOf(account);
         modelMap.put("messages", drafts);
-        modelMap.put("groups", account.getGroups());
 
         return "inbox";
     }
 
     @GetMapping(path = "/sent")
-    public String getSent(ModelMap modelMap,
-                          @AuthenticationPrincipal AccountDetails accountDetails) {
+    public String getSent(@AuthenticationPrincipal AccountDetails accountDetails,
+                          ModelMap modelMap) {
         Account account = accountDetails.getAccount();
-        List<Message> sentMessages = messageService.findSentBy(account);
+        List<Message> sentMessages = messages.findSentBy(account);
         modelMap.put("messages", sentMessages);
-        modelMap.put("groups", account.getGroups());
 
         return "inbox";
     }
