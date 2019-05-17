@@ -1,8 +1,3 @@
-Vue.component('recipient-email-item', {
-    props: ['field'],
-    template: '<input class="form-control" :name="field.name" :value="field.email">'
-});
-
 const app = new Vue({
     el: '#app',
     data: {
@@ -20,8 +15,19 @@ const app = new Vue({
                 this.recipientsEmails.push(newField);
             }
             this.newEmail = '';
+            this.recipientsEmails = this.recipientsEmails.filter(e => e.email.trim() !== '');
         }
     }
 });
 
-const changeAction = path = document.getElementById('app').action = path;
+Vue.component('recipient-email-item', {
+    props: ['field'],
+    template: '<input class="list-group-item" :name="field.name" :value="field.email" :click="removeElement(field.id)" readonly>',
+    methods: {
+        removeElement(id) {
+            app.recipientsEmails = app.recipientsEmails.filter(e => e.id !== id);
+        }
+    }
+});
+
+const changeAction = formAction => document.getElementById('app').action = formAction;
