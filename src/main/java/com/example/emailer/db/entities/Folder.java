@@ -32,6 +32,10 @@ public class Folder implements Comparable<Folder> {
     @Relationship(type = "CONTAINS")
     private List<Message> messages = new LinkedList<>();
 
+    public Folder(String name) {
+        this.name = name;
+    }
+
     @Override
     public int compareTo(Folder o) {
         return Long.compare(folderId, o.folderId);

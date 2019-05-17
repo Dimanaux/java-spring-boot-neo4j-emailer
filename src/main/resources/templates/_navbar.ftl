@@ -12,10 +12,6 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="#">Drafts</a>
-            </li>
-
-            <li class="nav-item">
                 <a href="/inbox/sent" class="nav-link">Sent</a>
             </li>
 
@@ -29,14 +25,14 @@
                     Folders
                 </a>
 
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <div class="dropdown-menu" id="folder_list" aria-labelledby="navbarDropdown">
                     <#if current_user?? && current_user.folders??>
                         <#list current_user.folders as folder>
                             <a class="dropdown-item" href="/inbox/folders/${folder.name}">${folder.name}</a>
                         </#list>
                         <div class="dropdown-divider"></div>
                     </#if>
-                    <a class="dropdown-item" href="/inbox/folders/new">New folder</a>
+                    <a class="dropdown-item" onclick="createFolder()">New folder</a>
                 </div>
             </li>
 
