@@ -1,3 +1,4 @@
+<#-- @ftlvariable name="contacts" type="java.util.Set<com.example.emailer.db.entities.Account>" -->
 <#-- @ftlvariable name="recipient_email" type="java.lang.String" -->
 <#-- @ftlvariable name="signature" type="java.lang.String" -->
 <#include "_html.ftl">
@@ -16,7 +17,7 @@
 
     <datalist id="contacts-list">
         <#list contacts as contact>
-            <option value="${contact.email}">${contact.name}</option>
+            <option value="${contact.email}">${contact.getFullName()}</option>
         </#list>
     </datalist>
 
@@ -29,16 +30,11 @@
                             v-for="email in recipientsEmails"
                             v-bind:field="email"
                             v-bind:key="email.id"
-                            v-on:click="deleteInput(email.id)"
                     ></recipient-email-item>
                 </ul>
-                <input type="text" class="form-control" list="contacts-list"
-                        <#if RequestParameters.recipient_email??>
-                            value="${RequestParameters.recipient_email}"
-                        </#if>
+                <input type="text" id="email-input" class="form-control" list="contacts-list"
                        v-model="newEmail"
-                       v-on:blur="newEmailField()"
-                >
+                       v-on:blur="newEmailField()">
             </div>
         </div>
         <div class="form-group">
@@ -66,7 +62,11 @@
     <script src="/static/compose_message.js"></script>
 
     <script>
-        var simplemde = new SimpleMDE();
+        const simplemde = new SimpleMDE();
+
+        <#if RequestParameters.recipient_email??>
+        app.recipientsEmails.push({id: 0, email: "${RequestParameters.recipient_email}"});
+        </#if>
     </script>
 
 </#macro>
