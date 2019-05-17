@@ -1,9 +1,9 @@
 package com.example.emailer.forms;
 
-import com.example.emailer.forms.validation.EmailAddressConstraint;
+import com.example.emailer.forms.validation.EmailAddress;
 
 public class SignUpForm {
-    @EmailAddressConstraint
+    @EmailAddress
     private String email;
 
     private String firstName;
