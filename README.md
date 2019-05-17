@@ -33,3 +33,17 @@
     </li>
 </@security.authorize>
 ```
+
+### Jump to:
+1. [Aspects](/src/main/java/com/example/emailer/aspects/)
+2. [validation](/src/main/java/com/example/emailer/forms/validation/) TODO
+3. [ajax](/src/main/resources/static/message.js)
+4. TODO chat plugin
+5. [spring data jpa NEO4J!](/src/main/java/com/example/emailer/db/repositories/)
+6. Docker TODO
+7. [Vue.js JS](/src/main/resources/static/compose_message.js), [Vue.js FTL](/src/main/resources/templates/compose_message.ftl)
+8. [FreeMarker + spring security tags](/src/main/java/com/example/emailer/security/config/)
+9. [postgresql](/src/main/java/com/example/emailer/db/entities/id/) + [neo4j](/src/main/java/com/example/emailer/db/)
+10. [spring security config](/src/main/java/com/example/emailer/security/)
+11. oauth TODO
+
