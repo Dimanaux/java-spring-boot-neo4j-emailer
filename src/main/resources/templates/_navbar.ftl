@@ -42,6 +42,10 @@
         </ul>
 
         <ul class="navbar-nav">
+            <li class="nav-item">
+                <a href="/inbox/search" class="nav-link">Search</a>
+            </li>
+
             <@security.authorize access="isAuthenticated()">
                 <li class="nav-item">
                     <a class="nav-link disabled">
