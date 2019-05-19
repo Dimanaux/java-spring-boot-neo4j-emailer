@@ -33,8 +33,8 @@ public class ModelMapAspect {
 
     @Around("getPage() && args(accountDetails,modelMap,..)")
     public Object putGroups(ProceedingJoinPoint pjp,
-                                 ModelMap modelMap,
-                                 AccountDetails accountDetails) throws Throwable {
+                            ModelMap modelMap,
+                            AccountDetails accountDetails) throws Throwable {
         modelMap.put("groups", accountDetails.getAccount().getGroups());
         return pjp.proceed(pjp.getArgs());
     }
