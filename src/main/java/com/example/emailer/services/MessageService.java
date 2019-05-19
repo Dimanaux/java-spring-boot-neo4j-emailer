@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public interface MessageService {
     Consumer<Account> send(MessageForm m);
@@ -25,4 +26,18 @@ public interface MessageService {
     Consumer<Account> delete(Long messageId);
 
     List<Message> findSentBy(Account account);
+
+    Search search(Account account);
+
+    interface Search {
+        Search to(String to);
+
+        Search from(String from);
+
+        Search subject(String subject);
+
+        Search content(String content);
+
+        Stream<Message> get();
+    }
 }

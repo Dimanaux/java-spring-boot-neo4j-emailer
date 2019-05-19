@@ -94,6 +94,12 @@ public class MessageServiceImpl implements MessageService {
         return allBySender;
     }
 
+    @Override
+    public Search search(Account account) {
+        List<Message> messages = findBelongingToAccount(account);
+        return new SimpleSearch(messages.stream());
+    }
+
     private Message toMessage(MessageForm messageForm) {
         Message email = new Message();
         email.setSubject(messageForm.getSubject());
@@ -121,5 +127,62 @@ public class MessageServiceImpl implements MessageService {
                 .map(accountRepository::findByEmail)
                 .filter(Optional::isPresent)
                 .map(Optional::get);
+    }
+}
+
+class SimpleSearch implements MessageService.Search {
+    private final Stream<Message> messages;
+
+    SimpleSearch(Stream<Message> messages) {
+        this.messages = messages;
+    }
+
+    @Override
+    public MessageService.Search to(final String to) {
+        if (to.trim().isEmpty()) return this;
+        return new SimpleSearch(
+                messages.filter(
+                        m -> m.getRecipientsSummary().toLowerCase()
+                                .contains(to.toLowerCase().trim())
+                )
+        );
+    }
+
+    @Override
+    public MessageService.Search from(final String from) {
+        if (from.trim().isEmpty()) return this;
+        return new SimpleSearch(
+                messages.filter(
+                        m -> m.getSender().getEmail().toLowerCase()
+                                .contains(from.toLowerCase().trim())
+                )
+        );
+    }
+
+    @Override
+    public MessageService.Search subject(final String subject) {
+        if (subject.trim().isEmpty()) return this;
+        return new SimpleSearch(
+                messages.filter(
+                        m -> m.getSubject().toLowerCase()
+                                .contains(subject.toLowerCase().trim())
+                )
+        );
+    }
+
+    @Override
+    public MessageService.Search content(final String content) {
+        if (content.trim().isEmpty()) return this;
+        return new SimpleSearch(
+                messages.filter(
+                        m -> m.getContent().toLowerCase()
+                                .contains(content.toLowerCase().trim())
+                )
+        );
+    }
+
+    @Override
+    public Stream<Message> get() {
+        return messages;
     }
 }
