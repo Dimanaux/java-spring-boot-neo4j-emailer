@@ -23,7 +23,7 @@
 
     <form method="post" id="app" action="/inbox/messages">
         <div class="form-group">
-            <label>Email address</label>
+            <label>Recipients:</label>
             <div class="form-row">
                 <ul class="list-group list-group-horizontal">
                     <recipient-email-item
@@ -32,9 +32,41 @@
                             v-bind:key="email.id"
                     ></recipient-email-item>
                 </ul>
-                <input type="text" id="email-input" class="form-control" list="contacts-list"
-                       v-model="newEmail"
-                       v-on:blur="newEmailField()">
+                <div class="form-group mx-sm-3 mb-2">
+                    <input type="text" class="form-control" list="contacts-list"
+                           v-model="newRecipient"
+                           v-on:blur="createRecipient()">
+                </div>
+            </div>
+            <label>Copy recipients:</label>
+            <div class="form-row">
+                <ul class="list-group list-group-horizontal">
+                    <recipient-email-item
+                            v-for="email in copyRecipientsEmails"
+                            v-bind:field="email"
+                            v-bind:key="email.id"
+                    ></recipient-email-item>
+                </ul>
+                <div class="form-group mx-sm-3 mb-2">
+                    <input type="text" class="form-control col" list="contacts-list"
+                           v-model="newCopyRecipient"
+                           v-on:blur="createCopyRecipient()">
+                </div>
+            </div>
+            <label>Secret copy recipients:</label>
+            <div class="form-row">
+                <ul class="list-group list-group-horizontal">
+                    <recipient-email-item
+                            v-for="email in secretCopyRecipientsEmails"
+                            v-bind:field="email"
+                            v-bind:key="email.id"
+                    ></recipient-email-item>
+                </ul>
+                <div class="form-group mx-sm-3 mb-2">
+                    <input type="text" class="form-control" list="contacts-list"
+                           v-model="newSecretCopyRecipient"
+                           v-on:blur="createSecretCopyRecipient()">
+                </div>
             </div>
         </div>
         <div class="form-group">
