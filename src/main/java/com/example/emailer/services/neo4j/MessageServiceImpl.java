@@ -130,6 +130,7 @@ public class MessageServiceImpl implements MessageService {
     }
 }
 
+
 class SimpleSearch implements MessageService.Search {
     private final Stream<Message> messages;
 
