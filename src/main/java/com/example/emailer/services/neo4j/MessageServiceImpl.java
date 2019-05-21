@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -127,6 +128,7 @@ public class MessageServiceImpl implements MessageService {
             return Stream.empty();
         }
         return emails.stream()
+                .filter(Objects::nonNull)
                 .filter(s -> !s.isEmpty())
                 .distinct()
                 .map(accountRepository::findByEmail)

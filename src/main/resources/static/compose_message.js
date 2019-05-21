@@ -2,20 +2,36 @@ const app = new Vue({
     el: '#app',
     data: {
         recipientsEmails: [],
-        newEmail: ''
+        copyRecipientsEmails: [],
+        secretCopyRecipientsEmails: [],
+        newRecipient: '',
+        newCopyRecipient: '',
+        newSecretCopyRecipient: ''
     },
     methods: {
-        newEmailField() {
+        createEmailField(arr, name, value) {
+            if (value.trim() === '') return;
             const newField = {
-                id: this.recipientsEmails.length,
-                email: this.newEmail,
+                id: arr.length,
+                email: value,
             };
-            newField.name = `recipients[${newField.id}]`;
-            if (this.recipientsEmails.filter(field => field.email === newField.email).length === 0) {
-                this.recipientsEmails.push(newField);
+            newField.name = `${name}[${arr.length}]`;
+            if (arr.filter(field => field.email === newField.email).length === 0) {
+                arr.push(newField);
             }
-            this.newEmail = '';
-            this.recipientsEmails = this.recipientsEmails.filter(e => e.email.trim() !== '');
+            arr = arr.filter(e => e.email.trim() !== '');
+        },
+        createRecipient() {
+            this.createEmailField(this.recipientsEmails, 'recipients', this.newRecipient);
+            this.newRecipient = '';
+        },
+        createCopyRecipient() {
+            this.createEmailField(this.copyRecipientsEmails, 'copyRecipients', this.newCopyRecipient);
+            this.newCopyRecipient = '';
+        },
+        createSecretCopyRecipient() {
+            this.createEmailField(this.secretCopyRecipientsEmails, 'secretCopyRecipients', this.newSecretCopyRecipient);
+            this.newSecretCopyRecipient = '';
         }
     }
 });
@@ -26,6 +42,8 @@ Vue.component('recipient-email-item', {
     methods: {
         removeElement(id) {
             app.recipientsEmails = app.recipientsEmails.filter(e => e.id !== id);
+            app.copyRecipientsEmails = app.copyRecipientsEmails.filter(e => e.id !== id);
+            app.secretCopyRecipientsEmails = app.secretCopyRecipientsEmails.filter(e => e.id !== id);
         }
     }
 });
