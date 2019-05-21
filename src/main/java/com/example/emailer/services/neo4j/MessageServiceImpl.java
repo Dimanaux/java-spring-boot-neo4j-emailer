@@ -39,11 +39,16 @@ public class MessageServiceImpl implements MessageService {
 
             messageRepository.addMessageToAccount(account.getAccountId(), email.getMessageId());
 
-            accountStream(messageForm.getRecipients())
-                    .forEach(a -> messageRepository.addMessageToAccount(a.getAccountId(), email.getMessageId()));
-            accountStream(messageForm.getRecipients())
-                    .forEach(a -> messageRepository.setRecipient(a.getAccountId(), email.getMessageId()));
-            //todo copies recipients
+            Consumer<Account> addToEmail = a -> messageRepository.addMessageToAccount(a.getAccountId(), email.getMessageId());
+            Consumer<Account> setRecipient = a -> messageRepository.setRecipient(a.getAccountId(), email.getMessageId());
+            Consumer<Account> setCopyRecipient = a -> messageRepository.setCopyRecipient(a.getAccountId(), email.getMessageId());
+            Consumer<Account> setSecretCopyRecipient = a -> messageRepository.setSecretCopyRecipient(a.getAccountId(), email.getMessageId());
+
+            accountStream(messageForm.getRecipients()).peek(addToEmail).forEach(setRecipient);
+
+            accountStream(messageForm.getCopyRecipients()).peek(addToEmail).forEach(setCopyRecipient);
+
+            accountStream(messageForm.getSecretCopyRecipients()).peek(addToEmail).forEach(setSecretCopyRecipient);
         };
     }
 

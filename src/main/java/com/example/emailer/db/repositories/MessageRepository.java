@@ -29,12 +29,18 @@ public interface MessageRepository extends Neo4jRepository<Message, Long> {
     boolean accountHasMessage(@Param("accountId") long accountId,
                               @Param("messageId") long messageId);
 
+    @Query("MATCH (f:Folder {folderId: {folderId}})-[c:CONTAINS]->(m:Message)-[r]-(a) RETURN f, c, m, r, a;")
+    List<Message> findByFolder(@Param("folderId") long folderId);
+
     @Query("MATCH (a:Account {accountId: {accountId}}) MATCH (m:Message {messageId: {messageId}}) CREATE (a)<-[:SENT_BY]-(m);")
     void setSender(@Param("accountId") Long accountId, @Param("messageId") Long messageId);
 
     @Query("MATCH (a:Account {accountId: {accountId}}) MATCH (m:Message {messageId: {messageId}}) CREATE (a)<-[:SENT_TO]-(m);")
     void setRecipient(@Param("accountId") Long accountId, @Param("messageId") Long messageId);
 
-    @Query("MATCH (f:Folder {folderId: {folderId}})-[c:CONTAINS]->(m:Message)-[r]-(a) RETURN f, c, m, r, a;")
-    List<Message> findByFolder(@Param("folderId") long folderId);
+    @Query("MATCH (a:Account {accountId: {accountId}}) MATCH (m:Message {messageId: {messageId}}) CREATE (a)<-[:COPIED_TO]-(m);")
+    void setCopyRecipient(Long accountId, Long messageId);
+
+    @Query("MATCH (a:Account {accountId: {accountId}}) MATCH (m:Message {messageId: {messageId}}) CREATE (a)<-[:SECRETLY_COPIED_TO]-(m);")
+    void setSecretCopyRecipient(Long accountId, Long messageId);
 }
