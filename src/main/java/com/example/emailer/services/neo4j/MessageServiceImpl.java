@@ -55,16 +55,26 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public Consumer<Account> saveToDrafts(final MessageForm messageForm) {
-        final Message emailMessage = toMessage(messageForm);
+        final Message email = toMessage(messageForm);
 
         return account -> {
-            account.getMessages().add(emailMessage);
+            email.setStatus("DRAFT");
+            messageRepository.save(email);
 
-            emailMessage.setSender(account);
-            emailMessage.setStatus("DRAFT");
+            messageRepository.setSender(account.getAccountId(), email.getMessageId());
 
-            accountRepository.save(account);
-            messageRepository.save(emailMessage);
+            messageRepository.addMessageToAccount(account.getAccountId(), email.getMessageId());
+
+            Consumer<Account> addToEmail = a -> messageRepository.addMessageToAccount(a.getAccountId(), email.getMessageId());
+            Consumer<Account> setRecipient = a -> messageRepository.setRecipient(a.getAccountId(), email.getMessageId());
+            Consumer<Account> setCopyRecipient = a -> messageRepository.setCopyRecipient(a.getAccountId(), email.getMessageId());
+            Consumer<Account> setSecretCopyRecipient = a -> messageRepository.setSecretCopyRecipient(a.getAccountId(), email.getMessageId());
+
+            accountStream(messageForm.getRecipients()).forEach(setRecipient);
+
+            accountStream(messageForm.getCopyRecipients()).forEach(setCopyRecipient);
+
+            accountStream(messageForm.getSecretCopyRecipients()).forEach(setSecretCopyRecipient);
         };
     }
 
