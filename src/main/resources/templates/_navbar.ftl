@@ -39,6 +39,10 @@
             <li class="nav-item">
                 <a href="/inbox/compose" class="nav-link">Compose</a>
             </li>
+
+            <li class="nav-item">
+                <a href="/groups" class="nav-link">Groups</a>
+            </li>
         </ul>
 
         <ul class="navbar-nav">

@@ -7,6 +7,9 @@
     <#list groups as group>
         <div>
             <h4>${group.name}</h4>
+            <small>copy invite link:
+                <button class="btn btn-link">/groups/${group.groupId}</button>
+            </small>
 
             <div>
                 <#list group.contacts as contact>
@@ -30,7 +33,6 @@
             <input class="btn btn-primary" type="submit" value="create group">
         </form>
     </details>
-
 </#macro>
 
 <@page></@page>

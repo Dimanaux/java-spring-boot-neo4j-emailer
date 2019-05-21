@@ -65,6 +65,5 @@ public class MessagesController {
         messageService.saveToDrafts(messageForm).accept(sender);
 
         return "redirect:/inbox";
-
     }
 }

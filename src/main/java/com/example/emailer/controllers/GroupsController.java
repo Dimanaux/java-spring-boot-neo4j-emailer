@@ -42,6 +42,16 @@ public class GroupsController {
         return "redirect:/groups";
     }
 
+    @GetMapping(path = "/{id}")
+    public String group(@AuthenticationPrincipal AccountDetails accountDetails,
+                        ModelMap modelMap,
+                        @PathVariable("id") Long groupId) {
+        Account account = accountDetails.getAccount();
+        Optional<Group> group = groupService.findById(groupId);
+        modelMap.put("group", group);
+        return "group";
+    }
+
     @PostMapping(path = "/{id}")
     public String joinGroup(@AuthenticationPrincipal AccountDetails accountDetails,
                             @PathVariable("id") Long groupId) {
