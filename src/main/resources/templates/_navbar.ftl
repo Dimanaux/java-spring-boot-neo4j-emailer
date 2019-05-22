@@ -43,6 +43,10 @@
             <li class="nav-item">
                 <a href="/groups" class="nav-link">Groups</a>
             </li>
+
+            <li class="nav-item">
+                <a href="/signature" class="nav-link">Default signature</a>
+            </li>
         </ul>
 
         <ul class="navbar-nav">
@@ -53,7 +57,7 @@
             <@security.authorize access="isAuthenticated()">
                 <li class="nav-item">
                     <a class="nav-link disabled">
-                        signed in as <@security.authentication property="principal.username" />
+                        signed in as <@security.authentication property="principal.username"/>
                     </a>
                 </li>
                 <li class="nav-item">

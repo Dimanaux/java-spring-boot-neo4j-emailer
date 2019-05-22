@@ -1,6 +1,5 @@
 package com.example.emailer.db.repositories;
 
-import com.example.emailer.db.entities.Account;
 import com.example.emailer.db.entities.Message;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
@@ -12,7 +11,8 @@ public interface MessageRepository extends Neo4jRepository<Message, Long> {
     @Query("MATCH (a:Account {accountId: {accountId}})-[p:HAS]->(m:Message {status: 'SENT'})-[r]-(i) RETURN a, m, p, r, i;")
     List<Message> findAllBySender(@Param("accountId") long accountId);
 
-    List<Message> findAllBySenderAndStatus(Account account, String status);
+    @Query("MATCH (a:Account {accountId: {accountId}})-[p:HAS]->(m:Message {status: {status}})-[r]-(i) RETURN a, m, p, r, i;")
+    List<Message> findAllBySenderAndStatus(@Param("accountId") long accountId, @Param("status") String status);
 
     @Query("MATCH (a: Account {accountId: {accountId}})-[p:HAS]->(m: Message {messageId: {messageId}}) DELETE p;")
     void deleteMessageFromAccount(@Param("accountId") long accountId,

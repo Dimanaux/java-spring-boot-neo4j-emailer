@@ -29,6 +29,8 @@ public class Account implements Comparable<Account> {
 
     private String password;
 
+    private String signature;
+
     @Relationship(type = "IN")
     private Set<Group> groups = new TreeSet<>();
 

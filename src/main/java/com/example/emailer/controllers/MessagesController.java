@@ -25,9 +25,9 @@ public class MessagesController {
     }
 
     @GetMapping(path = "/{id}")
-    public String getMessage(@PathVariable("id") int messageId,
+    public String getMessage(@AuthenticationPrincipal AccountDetails accountDetails,
                              ModelMap modelMap,
-                             @AuthenticationPrincipal AccountDetails accountDetails) {
+                             @PathVariable("id") int messageId) {
         Optional<Message> message = messageService.find(messageId);
         Account account = accountDetails.getAccount();
 
@@ -48,8 +48,8 @@ public class MessagesController {
     }
 
     @PostMapping
-    public String sendMessage(MessageForm messageForm,
-                              @AuthenticationPrincipal AccountDetails accountDetails) {
+    public String sendMessage(@AuthenticationPrincipal AccountDetails accountDetails,
+                              MessageForm messageForm) {
         Account sender = accountDetails.getAccount();
 
         messageService.send(messageForm).accept(sender);
@@ -58,8 +58,8 @@ public class MessagesController {
     }
 
     @PostMapping(path = "/drafts")
-    public String saveToDrafts(MessageForm messageForm,
-                               @AuthenticationPrincipal AccountDetails accountDetails) {
+    public String saveToDrafts(@AuthenticationPrincipal AccountDetails accountDetails,
+                               MessageForm messageForm) {
         Account sender = accountDetails.getAccount();
 
         messageService.saveToDrafts(messageForm).accept(sender);

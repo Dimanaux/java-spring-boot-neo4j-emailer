@@ -79,11 +79,8 @@
             <label>
                 Content
                 <#--class="form-control" id="message_body_field"-->
-                <textarea name="content" cols="100" rows="10">
-                    <#if signature??>
-                        ${signature}
-                    </#if>
-                </textarea>
+                <textarea name="content" cols="100"
+                          rows="10"><#if current_user.signature??>${current_user.signature}</#if></textarea>
             </label>
         </div>
 
@@ -91,6 +88,8 @@
         <input type="submit" class="btn btn-success" onclick="changeAction('/inbox/messages/drafts')"
                value="Save to drafts">
     </form>
+
+    <br>
     <script src="/static/compose_message.js"></script>
 
     <script>
@@ -100,7 +99,6 @@
         app.recipientsEmails.push({id: 0, email: "${RequestParameters.recipient_email}"});
         </#if>
     </script>
-
 </#macro>
 
 <@page></@page>

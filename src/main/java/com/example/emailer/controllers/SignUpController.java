@@ -1,7 +1,7 @@
 package com.example.emailer.controllers;
 
 import com.example.emailer.forms.SignUpForm;
-import com.example.emailer.services.SignUpService;
+import com.example.emailer.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(path = "/sign_up")
 public class SignUpController {
 
-    private final SignUpService signUpService;
+    private final AccountService accountService;
 
     @Autowired
-    public SignUpController(SignUpService signUpService) {
-        this.signUpService = signUpService;
+    public SignUpController(AccountService accountService) {
+        this.accountService = accountService;
     }
 
     @GetMapping
@@ -26,7 +26,7 @@ public class SignUpController {
 
     @PostMapping
     public String signUpUser(SignUpForm signUpForm) {
-        signUpService.signUp(signUpForm);
+        accountService.signUp(signUpForm);
         return "redirect:/sign_in";
     }
 }

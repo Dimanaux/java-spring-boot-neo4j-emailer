@@ -57,6 +57,7 @@
                     </#list>
                 </div>
             </div>
+            <a href="/inbox/compose?recipient_email=${message.sender.email}" class="btn btn-link">Reply</a>
         </div>
     </div>
 

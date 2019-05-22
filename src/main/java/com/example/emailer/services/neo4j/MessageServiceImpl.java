@@ -70,6 +70,8 @@ public class MessageServiceImpl implements MessageService {
             Consumer<Account> setCopyRecipient = a -> messageRepository.setCopyRecipient(a.getAccountId(), email.getMessageId());
             Consumer<Account> setSecretCopyRecipient = a -> messageRepository.setSecretCopyRecipient(a.getAccountId(), email.getMessageId());
 
+            addToEmail.accept(account);
+
             accountStream(messageForm.getRecipients()).forEach(setRecipient);
 
             accountStream(messageForm.getCopyRecipients()).forEach(setCopyRecipient);
@@ -80,7 +82,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public List<Message> findDraftsOf(Account account) {
-        return messageRepository.findAllBySenderAndStatus(account, "DRAFT");
+        return messageRepository.findAllBySenderAndStatus(account.getAccountId(), "DRAFT");
     }
 
     @Override
@@ -120,16 +122,6 @@ public class MessageServiceImpl implements MessageService {
         Message email = new Message();
         email.setSubject(messageForm.getSubject());
         email.setContent(messageForm.getContent());
-
-//        accountStream(messageForm.getRecipients())
-//                .forEach(a -> email.getRecipients().add(a));
-//
-//        accountStream(messageForm.getCopyRecipients())
-//                .forEach(a -> email.getCopiesRecipients().add(a));
-//
-//        accountStream(messageForm.getSecretCopyRecipients())
-//                .forEach(a -> email.getSecretCopiesRecipients().add(a));
-
         return email;
     }
 
