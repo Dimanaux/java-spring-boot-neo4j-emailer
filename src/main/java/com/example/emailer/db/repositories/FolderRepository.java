@@ -14,17 +14,19 @@ public interface FolderRepository extends Neo4jRepository<Folder, Long> {
             " MATCH (a:Account {accountId: {accountId}}) " +
             " CREATE (a)-[:OWNS]->(f) " +
             " CREATE (f)-[:OWNED_BY]->(a);")
-    void bindToAccount(@Param("accountId") long accountId, @Param("folderId") long folderId);
+    void bindToAccount(@Param("accountId") String accountId,
+                       @Param("folderId") long folderId);
 
     @Query("MATCH (a:Account {accountId: {accountId}})-[:OWNS]->(f:Folder {name: {folderName}})-[:CONTAINS]->(m:Message)-->(p) RETURN a, f, m, p;")
-    Optional<Folder> findByAccountAndName(@Param("accountId") long accountId,
+    Optional<Folder> findByAccountAndName(@Param("accountId") String accountId,
                                           @Param("folderName") String folderName);
 
     @Query("MATCH (a:Account {accountId: {accountId}})-[:OWNS]->(f:Folder {name: {folderName}}) RETURN a, f;")
-    Optional<Folder> findEmptyByAccountAndName(@Param("accountId") long accountId,
-                                          @Param("folderName") String folderName);
+    Optional<Folder> findEmptyByAccountAndName(@Param("accountId") String accountId,
+                                               @Param("folderName") String folderName);
 
     @Query("MATCH (f:Folder {folderId: {folderId}}) MATCH (m:Message {messageId: {messageId}}) CREATE (f)-[:CONTAINS]->(m);")
-    void bindFolderAndMessage(@Param("folderId") long folderId, @Param("messageId") long messageId);
+    void bindFolderAndMessage(@Param("folderId") long folderId,
+                              @Param("messageId") long messageId);
 
 }

@@ -14,5 +14,5 @@ public interface AccountRepository extends Neo4jRepository<Account, Long> {
     List<Account> findAllByFirstNameAndLastName(String firstName, String lastName);
 
     @Query("MATCH (a:Account {accountId: {id}}) SET a.signature = {signature};")
-    void signature(@Param("id") Long accountId, @Param("signature") String signature);
+    void signature(@Param("id") String accountId, @Param("signature") String signature);
 }

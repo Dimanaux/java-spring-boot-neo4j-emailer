@@ -9,11 +9,11 @@ import java.util.List;
 
 public interface GroupRepository extends Neo4jRepository<Group, Long> {
     @Query("MATCH (g:Group {groupId: {groupId}}) MATCH (a:Account {accountId: {accountId}}) CREATE (g)-[:OWNED_BY]->(a);")
-    void setOwner(@Param("groupId") Long groupId, @Param("accountId") Long accountId);
+    void setOwner(@Param("groupId") Long groupId, @Param("accountId") String accountId);
 
     @Query("MATCH (g:Group {groupId: {groupId}}) MATCH (a:Account {accountId: {accountId}}) CREATE (g)-[:CONTAINS]->(a) CREATE (a)-[:IN]->(g);")
-    void bindAccountToGroup(@Param("groupId") Long groupId, @Param("accountId") Long accountId);
+    void bindAccountToGroup(@Param("groupId") Long groupId, @Param("accountId") String accountId);
 
     @Query("MATCH (a:Account {accountId: {accountId}})-[:IN]-(g:Group)-[c:CONTAINS]-(p) RETURN a, g, c, p;")
-    List<Group> groupsOf(@Param("accountId") Long accountId);
+    List<Group> groupsOf(@Param("accountId") String accountId);
 }

@@ -20,7 +20,7 @@ import java.util.TreeSet;
 public class Account implements Comparable<Account> {
     @Id
     @GeneratedValue(strategy = AccountIdStrategy.class)
-    private Long accountId;
+    private String accountId;
 
     private String firstName;
     private String lastName;
@@ -49,7 +49,7 @@ public class Account implements Comparable<Account> {
 
     @Override
     public int compareTo(Account o) {
-        return Long.compare(accountId, o.accountId);
+        return accountId.compareTo(o.accountId);
     }
 
     @Override

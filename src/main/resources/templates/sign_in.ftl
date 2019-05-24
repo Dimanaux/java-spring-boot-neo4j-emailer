@@ -36,6 +36,10 @@
             Don't have an account?
             <a href="/sign_up">Create</a>
         </p>
+
+        <p>
+            Sign in via <a href="/login">Google</a>
+        </p>
     </form>
 </#macro>
 

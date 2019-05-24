@@ -10,7 +10,7 @@ public abstract class AbstractSequenceBasedIdStrategy implements IdStrategy {
 
     private final RowMapper<Long> longMapper = (rs, i) -> rs.getLong("nextval");
 
-    public AbstractSequenceBasedIdStrategy() {
+    AbstractSequenceBasedIdStrategy() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource(
                 "jdbc:postgresql://localhost:5432/emailer",
                 "postgres", "postgres"
@@ -20,8 +20,7 @@ public abstract class AbstractSequenceBasedIdStrategy implements IdStrategy {
     }
 
     @Override
-    final
-    public Long generateId(Object o) {
+    public final Long generateId(Object o) {
         return jdbcTemplate.queryForObject("SELECT nextval('" + sequenceName() + "')", longMapper);
     }
 
