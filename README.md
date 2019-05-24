@@ -45,5 +45,5 @@
 8. [FreeMarker + spring security tags](/src/main/java/com/example/emailer/security/config/)
 9. [postgresql](/src/main/java/com/example/emailer/db/entities/id/) + [neo4j](/src/main/java/com/example/emailer/db/)
 10. [spring security config](/src/main/java/com/example/emailer/security/)
-11. oauth TODO
+11. [oauth](https://github.com/Dimanaux/java-spring-boot-neo4j-emailer/commit/a3c0dd3bf62dac3c558a276eb96ba7dfd2ac5969)
 
